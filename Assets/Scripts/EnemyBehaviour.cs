@@ -20,6 +20,6 @@ public class EnemyBehaviour : MonoBehaviour
 	void Update ()
     {
         //this.transform.position = new Vector2(position.x += velocity * Time.deltaTime, this.transform.position.y);
-        position.x += velocity * Time.deltaTime;
+        //position.x += velocity * Time.deltaTime;
 	}
 }
