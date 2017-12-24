@@ -29,6 +29,7 @@ public class CharacterBehaviour : MonoBehaviour
     public float jumpWalkForce;
     public float jumpRunForce;
     public float jumpForce;
+    public float jumpVelocity;
     [Header("Graphics")]
     public SpriteRenderer rend;
     // Use this for initialization
@@ -61,13 +62,7 @@ public class CharacterBehaviour : MonoBehaviour
     {
         collisions.MyFixedUpdate();
 
-        if (isJumping)
-        {
-            isJumping = false;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
-        rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
+        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
     }
 
     protected virtual void DefaultUpdate()
@@ -101,21 +96,16 @@ public class CharacterBehaviour : MonoBehaviour
         else movementSpeed = walkSpeed;
 
         if (collisions.isGrounded) horizontalSpeed = movementSpeed * axis.x;
+        if (collisions.justGotGrounded) jumpVelocity = 0;
+
         if (!collisions.isGrounded)
         {
-            if ((axis.x < 0.1f) || (axis.x > -0.1f)) horizontalSpeed += movementSpeed * axis.x / 15;
+            jumpVelocity -= 0.2f;
+            if ((axis.x < 0.1f) || (axis.x > -0.1f)) horizontalSpeed += movementSpeed * axis.x / 20;
             if (horizontalSpeed > movementSpeed && isFacingRight) horizontalSpeed = movementSpeed;
             if (horizontalSpeed < movementSpeed * -1 && !isFacingRight) horizontalSpeed = movementSpeed * -1;
 
         }
-
-        /*
-        if ((collisions.isTouchingWall == true) && (collisions.isGrounded == false) && (isJumping))
-        {
-            //Dash()
-            if (isFacingRight) horizontalSpeed = -7;
-            else horizontalSpeed = 7;
-        }*/
     }
 
     void VerticalMovement()
@@ -151,7 +141,21 @@ public class CharacterBehaviour : MonoBehaviour
 
             if (isRunning) jumpForce = jumpRunForce;
             else jumpForce = jumpWalkForce;
-            isJumping = true;
+            jumpVelocity = jumpForce;
+        }
+        else if ((collisions.isTouchingWall) && ((axis.x > 0.5) || (axis.x < -0.5)))
+        {
+            if (isRunning) jumpForce = jumpRunForce;
+            else jumpForce = jumpWalkForce;
+            jumpVelocity = 2;
+            if (axis.x > 0.5f)
+            {
+                horizontalSpeed = -7;
+            }
+            if (axis.x < -0.5f)
+            {
+                horizontalSpeed = 7;
+            }
         }
 
 

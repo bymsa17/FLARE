@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
     }
     void InputJump()
     {
-        if(Input.GetButton("Jump"))
+        if(Input.GetButtonDown("Jump"))
         {
             Debug.Log("Jump");
             // TODO: darle la orden al player de saltar

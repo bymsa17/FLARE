@@ -88,7 +88,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -218,14 +218,15 @@ MonoBehaviour:
   isLookingDown: 0
   rb: {fileID: 0}
   collisions: {fileID: 0}
-  walkSpeed: 5
-  runSpeed: 7
+  walkSpeed: 3
+  runSpeed: 5
   movementSpeed: 0
   horizontalSpeed: 0
   axis: {x: 0, y: 0}
   jumpWalkForce: 5
-  jumpRunForce: 6
+  jumpRunForce: 6.5
   jumpForce: 0
+  jumpVelocity: 0
   rend: {fileID: 212566754306166024}
 --- !u!212 &212566754306166024
 SpriteRenderer:
