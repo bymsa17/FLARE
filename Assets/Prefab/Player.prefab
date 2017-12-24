@@ -21,10 +21,12 @@ GameObject:
   - component: {fileID: 4054498877488786}
   - component: {fileID: 50609039056126098}
   - component: {fileID: 61327496424971704}
-  - component: {fileID: 114159063542283008}
-  m_Layer: 8
+  - component: {fileID: 95638679910147382}
+  - component: {fileID: 114691942412163538}
+  - component: {fileID: 114860495442742878}
+  m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +54,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1079191410380392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.218, y: 0.393, z: 0}
+  m_LocalPosition: {x: 0, y: 0.614, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4781219206701926}
@@ -117,7 +119,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.45263994}
   m_EdgeRadius: 0.1
---- !u!114 &114159063542283008
+--- !u!95 &95638679910147382
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079191410380392}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7494256fbfbad2c48b249b3f3227f193, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114691942412163538
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -125,19 +144,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079191410380392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7456caca336be384d895570142fc4714, type: 3}
+  m_Script: {fileID: 11500000, guid: b2655fd3ee46e1e4ea1b1a168505f6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkGround: 1
+  checkCeiling: 1
+  checkWall: 1
   isGrounded: 0
-  wasGroundedLastFrame: 0
-  justGrounded: 0
-  justNOTGrounded: 0
+  isTouchingCeiling: 0
+  isTouchingWall: 0
   isFalling: 0
-  groundBoxPos: {x: 0, y: 0}
-  groundBoxSize: {x: 0.25, y: 0.07}
-  maxHits: 1
-  detectGround: 1
-  filter:
+  wasGroundedLastFrame: 0
+  wasTouchingCeilingLastFrame: 0
+  wasTouchingWallLastFrame: 0
+  justGotGrounded: 0
+  justNotGrounded: 0
+  justTouchWall: 0
+  justTouchCeiling: 0
+  groundFilter:
     useTriggers: 0
     useLayerMask: 1
     useDepth: 0
@@ -151,6 +175,58 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  wallFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 512
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  maxGroundHits: 2
+  bottomBoxSize: {x: 0.27, y: 0.05}
+  bottomBoxPos: {x: 0, y: 0}
+  topBoxSize: {x: 0, y: 0}
+  topBoxPos: {x: 0, y: 0}
+  sideBoxSize: {x: 0.05, y: 0.5}
+  sideBoxPos: {x: 0.15, y: 0.31}
+--- !u!114 &114860495442742878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079191410380392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b63503390706ea4ab7ed974d758fea6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  canMove: 1
+  canJump: 1
+  isFacingRight: 1
+  isJumping: 0
+  isRunning: 0
+  crouch: 0
+  isLookingUp: 0
+  isLookingDown: 0
+  rb: {fileID: 0}
+  collisions: {fileID: 0}
+  walkSpeed: 5
+  runSpeed: 7
+  movementSpeed: 0
+  horizontalSpeed: 0
+  axis: {x: 0, y: 0}
+  jumpWalkForce: 5
+  jumpRunForce: 6
+  jumpForce: 0
+  rend: {fileID: 212566754306166024}
 --- !u!212 &212566754306166024
 SpriteRenderer:
   m_ObjectHideFlags: 1

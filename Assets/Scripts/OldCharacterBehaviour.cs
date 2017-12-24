@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterBehaviour : MonoBehaviour
+public class OldCharacterBehaviour : MonoBehaviour 
 {
     public enum State { Default, Dead, God }
     public State state = State.Default;
@@ -79,20 +79,12 @@ public class CharacterBehaviour : MonoBehaviour
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        if (collisions.isTouchingWall)
+        if (!canMove || (-0.1f < axis.x && axis.x < 0.1f))
         {
-            if (isFacingRight && axis.x > 0.1f)
-            {
-                if (horizontalSpeed > 0.1f) horizontalSpeed = 0;
-            }
-
-            if (!isFacingRight && axis.x < -0.1f)
-            {
-                if (horizontalSpeed < -0.1f) horizontalSpeed = 0;
-            }
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            horizontalSpeed = 0;
+            return;
         }
-
-        if (!canMove) horizontalSpeed = 0;
 
         if (isFacingRight && axis.x < -0.1f) Flip();
         if (!isFacingRight && axis.x > 0.1f) Flip();
@@ -109,13 +101,13 @@ public class CharacterBehaviour : MonoBehaviour
 
         }
 
-        /*
-        if ((collisions.isTouchingWall == true) && (collisions.isGrounded == false) && (isJumping))
+
+        if ((collisions.isTouchingWall == true) && (collisions.isGrounded == false))
         {
             //Dash()
             if (isFacingRight) horizontalSpeed = -7;
             else horizontalSpeed = 7;
-        }*/
+        }
     }
 
     void VerticalMovement()
@@ -124,7 +116,10 @@ public class CharacterBehaviour : MonoBehaviour
         isLookingDown = false;
         isLookingUp = false;
     }
-
+    void Jump()
+    {
+        isJumping = true;
+    }
     void Flip()
     {
         rend.flipX = !rend.flipX;
@@ -151,7 +146,7 @@ public class CharacterBehaviour : MonoBehaviour
 
             if (isRunning) jumpForce = jumpRunForce;
             else jumpForce = jumpWalkForce;
-            isJumping = true;
+            Jump();
         }
 
 
