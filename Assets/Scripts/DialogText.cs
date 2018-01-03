@@ -7,12 +7,12 @@ public class DialogText : MonoBehaviour
 {
     private Text text;
     private int dialogLine = 0;
-    // Use this for initialization
-    void Start()
+	// Use this for initialization
+	void Start ()
     {
         text = GetComponentInChildren<Text>();
         TextData.AddDialogText(this);
-    }
+	}
 
     public void NextLine()
     {

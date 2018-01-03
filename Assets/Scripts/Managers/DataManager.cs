@@ -33,7 +33,7 @@ public static class GameData
 
 public static class TextData
 {
-    public static Dictionary<string, string> textData;
+    public static Dictionary<string, string> textData;    
     /* Dictionary<TKey, TValue>
      * TValue: es el tipo de variable que almacena.
      * TKey: es el identificador con el que guardo el value.
@@ -49,7 +49,7 @@ public static class TextData
         //Separando las columnas de cada linea
         for(int line = 1; line < allLines.Count; line++)
         {
-            string[] colText = allLines[line].Split('\t');
+            string[] colText = allLines[line].Split('\t');            
 
             if(Language.language == Language.Lang.esES) textData.Add(colText[0], colText[1]);
             else textData.Add(colText[0], colText[2]);
@@ -92,7 +92,7 @@ public static class TextData
     public static void AddDialogText(DialogText dialog)
     {
         if(dialogText == null) dialogText = new List<DialogText>();
-        dialogText.Add(dialog);
+        dialogText.Add(dialog);        
     }
     static void UpdateDialogText()
     {
@@ -106,7 +106,7 @@ public static class TextData
 
 public static class Language
 {
-    public enum Lang { none, esES, enUS };
+    public enum Lang { none, esES, enUS};
     public static Lang language;
 
     public static void Initialize()
@@ -134,6 +134,6 @@ public static class Language
 
     public static void UpdateTextLagunage()
     {
-        TextData.Initialize();
+        TextData.Initialize();        
     }
 }

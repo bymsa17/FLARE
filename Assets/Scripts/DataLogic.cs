@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class DataLogic : MonoBehaviour
 {
-    // Use this for initialization
-    void Awake()
-    {
-        Language.Initialize();
-    }
+	// Use this for initialization
+	void Awake ()
+    {      
+        Language.Initialize();        
+	}
 
     private void Update()
     {
