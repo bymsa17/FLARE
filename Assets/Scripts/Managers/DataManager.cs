@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public static class Data
 {
@@ -24,11 +26,87 @@ public static class Data
         }
         return lineList;
     }
+
+    public static object ReadBinaryPersistentPath<T>(string fileName)
+    {
+        Debug.Log("PersistentDataPath: " + Application.persistentDataPath);
+
+        string pathFile = Application.persistentDataPath + "/Data/Slots/" + fileName;
+        T data;
+
+        using(Stream stream = File.Open(pathFile, FileMode.Open))
+        {
+            var bformatter = new BinaryFormatter();
+            data = (T)bformatter.Deserialize(stream);
+        }
+        return data;
+    }
+
+    public static void WriteBinaryPersistentPath(object data, string fileName)
+    {
+        string path = Application.persistentDataPath + "/Data/Slots/";
+        if(!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        using(Stream stream = File.Open(path + fileName, FileMode.Create))
+        {
+            var bformater = new BinaryFormatter();
+            bformater.Serialize(stream, data);
+        }
+    }
 }
 
 public static class GameData
 {
+    [Serializable]
+    public struct GameState
+    {
+        public float playerPosition;
+        public bool hasKey;
+        public int score;
+        public string playerName;
+    }
+    public static GameState gameState;
 
+    public static void SaveGame(int slot)
+    {
+        Debug.Log("Saving");
+        Data.WriteBinaryPersistentPath(gameState, "SaveGame_" + slot + ".save");
+        Debug.Log("Saved");
+    }
+    public static void NewGame(int slot)
+    {
+        gameState = new GameState();
+        Debug.Log("New game");
+
+        gameState.playerPosition = 0;
+        gameState.hasKey = false;
+        gameState.score = 0;
+        gameState.playerName = "NoName";
+
+        SaveGame(slot);
+    }
+
+    public static void DeleteGame(int slot) { }
+    public static GameState LoadGame(int slot)
+    {
+        Debug.Log("LoadGame");
+        gameState = new GameState();
+
+        try
+        {
+            gameState = (GameState)Data.ReadBinaryPersistentPath<GameState>("SaveGame_" + slot + ".save");
+            Debug.Log("Game loaded");
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Loading error: " + e);
+            NewGame(slot);
+        }
+
+        return gameState;
+    }
 }
 
 public static class TextData
