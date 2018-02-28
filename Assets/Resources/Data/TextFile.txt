@@ -1,7 +1,15 @@
 id	spanish	english
 start	Empezar	Start
-exit	Salir	Exit
 options	Opciones	Options
-title	Titulo	Title
-dialog_1	Hola, que ase	Hello, what's up
-dialog_2	Prueba de dialogo	Dialog test
+exit	Salir	Exit
+title	Título	Title
+language	Idioma	Llanguage
+volume	Volumen	Volume
+quality	Calidad	Quality
+resolution	Resolución	Resolution
+fast	Rápidos	Fast
+good	Buenos	Good
+fantastic	Fantásticos	Fantastic
+ultra	Ultra	Ultra
+fullscreen	Pantalla completa	Fullscreen
+back	Atrás	Back

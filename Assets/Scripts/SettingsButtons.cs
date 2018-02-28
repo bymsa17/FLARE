@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SettingsButtons : MonoBehaviour
 {
+    public Slider musicSlider;
+    public Slider sfxSlider;
+
     public void ChangeResolution1920x1080()
     {
         Screen.SetResolution(1920, 1080, Screen.fullScreen);
@@ -43,4 +47,11 @@ public class SettingsButtons : MonoBehaviour
     {
         Screen.fullScreen = !Screen.fullScreen;
     }
+    /*
+    public void OnValueChanged()
+    {
+        AudioManager.SetMusicVolume(musicSlider.value);
+        AudioManager.SetSFXVolume(sfxSlider.value);
+    }*/
 }
+
