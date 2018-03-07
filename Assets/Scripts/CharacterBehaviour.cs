@@ -13,12 +13,14 @@ public class CharacterBehaviour : MonoBehaviour
     public bool isFacingRight = true;
     public bool isJumping = false;
     public bool isRunning = false;
+    public bool isLaddering = false;
     public bool crouch = false;
     public bool isLookingUp = false;
     public bool isLookingDown = false;
     [Header("Physics")]
     public Rigidbody2D rb;
     public Collisions collisions;
+    private float gravity;
     [Header("Speed")]
     public float walkSpeed;
     public float runSpeed;
@@ -68,6 +70,11 @@ public class CharacterBehaviour : MonoBehaviour
     protected virtual void DefaultUpdate()
     {
         HorizontalMovement();
+
+        if(isLaddering)
+        {
+            VerticalMovement();
+        }
     }
 
     void HorizontalMovement()
@@ -110,16 +117,38 @@ public class CharacterBehaviour : MonoBehaviour
 
     void VerticalMovement()
     {
-        crouch = false;
-        isLookingDown = false;
-        isLookingUp = false;
+        if((axis.y > 0.1f) || (axis.y < 0.1f))
+        {
+            this.transform.position += new Vector3(0, axis.y * 0.05f, 0);
+        }
     }
+
 
     void Flip()
     {
         rend.flipX = !rend.flipX;
         isFacingRight = !isFacingRight;
         collisions.Flip();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Ladder")
+        {
+            rb.gravityScale = 0;
+            rb.velocity = Vector2.zero;
+            isLaddering = true;
+            canJump = false;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.tag == "Ladder")
+        {
+            rb.gravityScale = gravity;
+            isLaddering = false;
+            canJump = true;
+        }
     }
 
     #region Public
