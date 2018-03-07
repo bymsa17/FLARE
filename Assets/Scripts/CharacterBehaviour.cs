@@ -105,6 +105,8 @@ public class CharacterBehaviour : MonoBehaviour
         if (collisions.isGrounded) horizontalSpeed = movementSpeed * axis.x;
         if (collisions.justGotGrounded) jumpVelocity = 0;
 
+        if(isLaddering) jumpVelocity = axis.y;
+
         if (!collisions.isGrounded)
         {
             jumpVelocity -= 0.2f;
