@@ -47,11 +47,11 @@ public class SettingsButtons : MonoBehaviour
     {
         Screen.fullScreen = !Screen.fullScreen;
     }
-    /*
+    
     public void OnValueChanged()
     {
         AudioManager.SetMusicVolume(musicSlider.value);
         AudioManager.SetSFXVolume(sfxSlider.value);
-    }*/
+    }
 }
 
