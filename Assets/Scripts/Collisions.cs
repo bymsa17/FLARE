@@ -19,6 +19,7 @@ public class Collisions : MonoBehaviour
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool isTouchingCeiling;
     [HideInInspector] public bool isTouchingWall;
+    [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isFalling;
     [HideInInspector] public bool wasGroundedLastFrame;
     [HideInInspector] public bool wasTouchingCeilingLastFrame;
@@ -26,7 +27,8 @@ public class Collisions : MonoBehaviour
     [HideInInspector] public bool justGotGrounded;
     [HideInInspector] public bool justNotGrounded;
     [HideInInspector] public bool justTouchWall;
-    [HideInInspector] public bool justTouchCeiling;    
+    [HideInInspector] public bool justTouchCeiling;
+    [HideInInspector] public bool justAttacking;
     [Header("Ground Filter")]
     public ContactFilter2D groundFilter;
     public ContactFilter2D wallFilter;
@@ -41,6 +43,9 @@ public class Collisions : MonoBehaviour
     [Header("Wall Box")]
     public Vector2 sideBoxSize;
     public Vector2 sideBoxPos;
+    [Header("Attack Box")]
+    public Vector2 attackBoxSize;
+    public Vector2 attackBoxPos;
     #endregion
 
     public void MyStart()
@@ -121,6 +126,20 @@ public class Collisions : MonoBehaviour
         if(!wasTouchingWallLastFrame && isTouchingWall) justTouchWall = true;
     }
 
+    private void AttackCollisions()
+    {
+        Collider2D[] result = new Collider2D[maxGroundHits];
+        Vector2 pos = this.transform.position;
+        int hits = Physics2D.OverlapBox(pos + attackBoxPos, attackBoxSize, 0, groundFilter, result);
+
+        if(hits > 0)
+        {
+            isAttacking = true;
+        }
+
+        if(!wasTouchingWallLastFrame && isTouchingWall) justAttacking = true;
+    }
+
     public void Flip()
     {
         sideBoxPos.x *= -1;
@@ -131,9 +150,12 @@ public class Collisions : MonoBehaviour
         Gizmos.color = Color.red;
         Vector2 pos = this.transform.position;
         Gizmos.DrawWireCube(pos + bottomBoxPos, bottomBoxSize);
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(pos + topBoxPos, topBoxSize);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(pos + sideBoxPos, sideBoxSize);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireCube(pos + attackBoxPos, attackBoxSize);
     }
 
 }

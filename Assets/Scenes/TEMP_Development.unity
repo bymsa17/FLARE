@@ -569,6 +569,7 @@ MonoBehaviour:
   isJumping: 0
   isRunning: 0
   isLaddering: 0
+  attack: 0
   crouch: 0
   isLookingUp: 0
   isLookingDown: 0
@@ -602,6 +603,7 @@ MonoBehaviour:
   isGrounded: 0
   isTouchingCeiling: 0
   isTouchingWall: 0
+  isAttacking: 0
   isFalling: 0
   wasGroundedLastFrame: 0
   wasTouchingCeilingLastFrame: 0
@@ -610,6 +612,7 @@ MonoBehaviour:
   justNotGrounded: 0
   justTouchWall: 0
   justTouchCeiling: 0
+  justAttacking: 0
   groundFilter:
     useTriggers: 0
     useLayerMask: 1
@@ -641,10 +644,12 @@ MonoBehaviour:
   maxGroundHits: 2
   bottomBoxSize: {x: 0.27, y: 0.05}
   bottomBoxPos: {x: 0, y: 0}
-  topBoxSize: {x: 0, y: 0}
-  topBoxPos: {x: 0, y: 0}
+  topBoxSize: {x: 0.27, y: 0.05}
+  topBoxPos: {x: 0, y: 0.68}
   sideBoxSize: {x: 0.05, y: 0.5}
   sideBoxPos: {x: 0.15, y: 0.31}
+  attackBoxSize: {x: 0.4, y: 0.75}
+  attackBoxPos: {x: 0.4, y: 0.35}
 --- !u!95 &1681445270
 Animator:
   serializedVersion: 3

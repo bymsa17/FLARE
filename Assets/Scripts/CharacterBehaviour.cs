@@ -14,6 +14,7 @@ public class CharacterBehaviour : MonoBehaviour
     public bool isJumping = false;
     public bool isRunning = false;
     public bool isLaddering = false;
+    public bool attack = false;
     public bool crouch = false;
     public bool isLookingUp = false;
     public bool isLookingDown = false;
@@ -125,6 +126,12 @@ public class CharacterBehaviour : MonoBehaviour
         }
     }
 
+    public void Attack()
+    {
+        //generate bounding box
+        //if enemy touch die
+
+    }
 
     void Flip()
     {
