@@ -84,7 +84,11 @@ public class CharacterBehaviour : MonoBehaviour
 
     protected virtual void DeadUpdate()
     {
-        life = false;
+        /*if (collisions.isTouchingPlayer)
+        {
+            Debug.Log("PlayerDead");
+            life = false;
+        }*/
     }
 
     void HorizontalMovement()
