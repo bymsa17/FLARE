@@ -14,6 +14,7 @@ public class EnemyBehaviour : MonoBehaviour
 	void Start ()
     {
         position = transform;
+        life = true;
 	}
 	
 	// Update is called once per frame
@@ -22,4 +23,11 @@ public class EnemyBehaviour : MonoBehaviour
         //this.transform.position = new Vector2(position.x += velocity * Time.deltaTime, this.transform.position.y);
         //position.x += velocity * Time.deltaTime;
 	}
+
+    public void Dead()
+    {
+        Debug.Log("EnemyDead");
+        life = false;
+        Destroy(this.gameObject, 1);
+    }
 }

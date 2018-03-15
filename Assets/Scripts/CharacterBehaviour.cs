@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
+    public EnemyBehaviour enemy;
+
     public enum State { Default, Dead, God }
     public State state = State.Default;
 
     [Header("State")]
+    public bool life = true;
     public bool canMove = true;
     public bool canJump = true;
     public bool isFacingRight = true;
@@ -40,6 +43,7 @@ public class CharacterBehaviour : MonoBehaviour
     {
         collisions = GetComponent<Collisions>();
         rb = GetComponent<Rigidbody2D>();
+        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyBehaviour>();
     }
 
     // Update is called once per frame
@@ -51,7 +55,7 @@ public class CharacterBehaviour : MonoBehaviour
                 DefaultUpdate();
                 break;
             case State.Dead:
-                // TODO: DeadUpdate();
+                DeadUpdate();
                 break;
             case State.God:
                 // TODO: GodUpdate();
@@ -76,6 +80,11 @@ public class CharacterBehaviour : MonoBehaviour
         {
             VerticalMovement();
         }
+    }
+
+    protected virtual void DeadUpdate()
+    {
+        life = false;
     }
 
     void HorizontalMovement()
@@ -128,9 +137,11 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void Attack()
     {
-        //generate bounding box
-        //if enemy touch die
-
+        if(collisions.isTouchingEnemy)
+        {
+            Debug.Log("PlayerAttack");
+            enemy.Dead();
+        }
     }
 
     void Flip()

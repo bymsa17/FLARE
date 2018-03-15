@@ -15,11 +15,12 @@ public class Collisions : MonoBehaviour
     public bool checkGround = true;
     public bool checkCeiling = true;
     public bool checkWall = true;
+    public bool checkAttack = true;
     [Header("State")]
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool isTouchingCeiling;
     [HideInInspector] public bool isTouchingWall;
-    [HideInInspector] public bool isAttacking;
+    public bool isTouchingEnemy;
     [HideInInspector] public bool isFalling;
     [HideInInspector] public bool wasGroundedLastFrame;
     [HideInInspector] public bool wasTouchingCeilingLastFrame;
@@ -28,10 +29,11 @@ public class Collisions : MonoBehaviour
     [HideInInspector] public bool justNotGrounded;
     [HideInInspector] public bool justTouchWall;
     [HideInInspector] public bool justTouchCeiling;
-    [HideInInspector] public bool justAttacking;
     [Header("Ground Filter")]
     public ContactFilter2D groundFilter;
+    public ContactFilter2D ceilingFilter;
     public ContactFilter2D wallFilter;
+    public ContactFilter2D attackFilter;
     public int maxGroundHits;
     private LayerMask _groundMaskSave;
     [Header("Ground Box")]
@@ -65,6 +67,7 @@ public class Collisions : MonoBehaviour
         if(checkGround) GroundCollision();
         if(checkCeiling) CeilingCollision();
         if(checkWall) WallCollision();
+        if(checkAttack) AttackCollisions();
     }
 
     private void ResetState()
@@ -76,6 +79,7 @@ public class Collisions : MonoBehaviour
         isGrounded = false;
         isTouchingWall = false;
         isTouchingCeiling = false;
+        isTouchingEnemy = false;
 
         justGotGrounded = false;
         justNotGrounded = false;
@@ -103,7 +107,7 @@ public class Collisions : MonoBehaviour
     {
         Collider2D[] results = new Collider2D[maxGroundHits];
         Vector2 pos = this.transform.position;
-        int hits = Physics2D.OverlapBox(pos + topBoxPos, topBoxSize, 0, groundFilter, results);
+        int hits = Physics2D.OverlapBox(pos + topBoxPos, topBoxSize, 0, ceilingFilter, results);
 
         if(hits > 0)
         {
@@ -130,19 +134,18 @@ public class Collisions : MonoBehaviour
     {
         Collider2D[] result = new Collider2D[maxGroundHits];
         Vector2 pos = this.transform.position;
-        int hits = Physics2D.OverlapBox(pos + attackBoxPos, attackBoxSize, 0, groundFilter, result);
+        int hits = Physics2D.OverlapBox(pos + attackBoxPos, attackBoxSize, 0, attackFilter, result);
 
         if(hits > 0)
         {
-            isAttacking = true;
+            isTouchingEnemy = true;
         }
-
-        if(!wasTouchingWallLastFrame && isTouchingWall) justAttacking = true;
     }
 
     public void Flip()
     {
         sideBoxPos.x *= -1;
+        attackBoxPos.x *= -1;
     }   
 
     private void OnDrawGizmosSelected()
