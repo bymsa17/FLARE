@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 282ac3b861aa1fc44ba5bbafa0433ecc
+timeCreated: 1521645686
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PixelGrunge
+  fontNames:
+  - PixelGrunge
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
