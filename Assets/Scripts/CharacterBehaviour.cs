@@ -10,7 +10,6 @@ public class CharacterBehaviour : MonoBehaviour
     public State state = State.Default;
 
     [Header("State")]
-    public bool life = true;
     public bool canMove = true;
     public bool canJump = true;
     public bool isFacingRight = true;
@@ -36,6 +35,9 @@ public class CharacterBehaviour : MonoBehaviour
     public float jumpRunForce;
     public float jumpForce;
     public float jumpVelocity;
+    [Header("Scores")]
+    public float score;
+    public int hiScore;
     [Header("Graphics")]
     public SpriteRenderer rend;
     // Use this for initialization
@@ -75,7 +77,7 @@ public class CharacterBehaviour : MonoBehaviour
     protected virtual void DefaultUpdate()
     {
         HorizontalMovement();
-
+        score += Time.deltaTime;
         if(isLaddering)
         {
             VerticalMovement();
@@ -84,11 +86,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     protected virtual void DeadUpdate()
     {
-        /*if (collisions.isTouchingPlayer)
-        {
-            Debug.Log("PlayerDead");
-            life = false;
-        }*/
+
     }
 
     void HorizontalMovement()
@@ -163,6 +161,12 @@ public class CharacterBehaviour : MonoBehaviour
             rb.velocity = Vector2.zero;
             isLaddering = true;
             canJump = false;
+        }
+
+        if(other.tag == "Enemy")
+        {
+            Debug.Log("TAS MORIO PRIMOGAO");
+            state = State.Dead;
         }
     }
     private void OnTriggerExit2D(Collider2D other)
