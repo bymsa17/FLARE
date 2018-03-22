@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterBehaviour : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class CharacterBehaviour : MonoBehaviour
     [Header("Scores")]
     public float score;
     public int hiScore;
+    public Text scoreText;
+    public Text hiScoreText;
     [Header("Graphics")]
     public SpriteRenderer rend;
     // Use this for initialization
@@ -65,6 +68,15 @@ public class CharacterBehaviour : MonoBehaviour
             default:
                 break;
         }
+
+
+        //SCORE
+        // ek /4.5f ese es un delay para que se vea un 000 cuando se acaba la animación
+        if(Mathf.RoundToInt(score - 4.5f) < 10) scoreText.text = "00" + Mathf.RoundToInt(score - 4.5f).ToString();
+        else if(Mathf.RoundToInt(score - 4.5f) < 100) scoreText.text = "0" + Mathf.RoundToInt(score - 4.5f).ToString();
+        else scoreText.text = "" + Mathf.RoundToInt(score - 4.5f).ToString();
+        hiScoreText.text = "High Score " + hiScore.ToString();
+        if(score - 4.5f >= hiScore) hiScore = Mathf.RoundToInt(score - 4.5f);
     }
 
     private void FixedUpdate()
@@ -143,6 +155,7 @@ public class CharacterBehaviour : MonoBehaviour
         {
             Debug.Log("PlayerAttack");
             enemy.Dead();
+            score += 5;
         }
     }
 
