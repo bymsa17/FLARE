@@ -40,6 +40,7 @@ public class CharacterBehaviour : MonoBehaviour
     public Text scoreText;
     public Text hiScoreText;
     private float startTime = 5;
+    public Animator canvasAnimator;
     [Header("Graphics")]
     public SpriteRenderer rend;
     // Use this for initialization
@@ -168,6 +169,11 @@ public class CharacterBehaviour : MonoBehaviour
             //enemy.Dead();
             score += 5;
         }
+    }
+    
+    public void Pause()
+    {
+        canvasAnimator.SetTrigger("Pause");
     }
 
     void Flip()

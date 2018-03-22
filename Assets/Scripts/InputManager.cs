@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     private CharacterBehaviour player;
+    public Transform canvasPause;
 
     void Start()
     {
@@ -66,7 +67,7 @@ public class InputManager : MonoBehaviour
         if(Input.GetButtonDown("Pause"))
         {
             Debug.Log("Pause");
-            // Pausar el juego
+            player.Pause();
         }
     }
 
