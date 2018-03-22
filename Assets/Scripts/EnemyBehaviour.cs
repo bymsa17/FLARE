@@ -4,30 +4,118 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    //public Vector2 position;
-    public Transform position;
-    private bool life;
-    public float velocity;
-    public bool direction;
+    public enum State { Default, Dead }
+    public State state = State.Default;
 
-	// Use this for initialization
-	void Start ()
+    [Header("State")]
+    public bool isFacingRight = true;
+    public bool isJumping = false;
+    [Header("Physics")]
+    public Rigidbody2D rb;
+    public Collisions collisions;
+    private float gravity;
+    [Header("Speed")]
+    public float walkSpeed;
+    public float movementSpeed;
+    public float horizontalSpeed;
+    public Vector2 axis;
+    [Header("Forces")]
+    public float jumpWalkForce;
+    public float jumpRunForce;
+    public float jumpForce;
+    public float jumpVelocity;
+    [Header("Graphics")]
+    public SpriteRenderer rend;
+    // Use this for initialization
+    void Start()
     {
-        position = transform;
-        life = true;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        collisions = GetComponent<Collisions>();
+        rb = GetComponent<Rigidbody2D>();
+        rend = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-        //this.transform.position = new Vector2(position.x += velocity * Time.deltaTime, this.transform.position.y);
-        //position.x += velocity * Time.deltaTime;
-	}
+        switch(state)
+        {
+            case State.Default:
+                DefaultUpdate();
+                break;
+            case State.Dead:
+                DeadUpdate();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        collisions.MyFixedUpdate();
+
+        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
+    }
+
+    protected virtual void DefaultUpdate()
+    {
+        HorizontalMovement();
+    }
+
+    protected virtual void DeadUpdate()
+    {
+        horizontalSpeed = 0;
+    }
+
+    void HorizontalMovement()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        
+        if (isFacingRight) horizontalSpeed = walkSpeed;
+        else horizontalSpeed = -walkSpeed;
+
+        if(collisions.isTouchingWall)
+        {
+          
+            Flip();
+        }
+        
+        //if(collisions.isGrounded) horizontalSpeed = movementSpeed * axis.x;
+        if(collisions.justGotGrounded) jumpVelocity = 0;
+
+        if(!collisions.isGrounded)
+        {
+            jumpVelocity -= 0.2f;
+            if((axis.x < 0.1f) || (axis.x > -0.1f)) horizontalSpeed += movementSpeed * axis.x / 20;
+            if(horizontalSpeed > movementSpeed && isFacingRight) horizontalSpeed = movementSpeed;
+            if(horizontalSpeed < movementSpeed * -1 && !isFacingRight) horizontalSpeed = movementSpeed * -1;
+
+        }
+    }
+
+    void Flip()
+    {
+        Debug.Log("Flip?");
+        rend.flipX = !rend.flipX;
+        isFacingRight = !isFacingRight;
+        collisions.Flip();
+    }
 
     public void Dead()
     {
-        Debug.Log("EnemyDead");
-        life = false;
-        Destroy(this.gameObject, 1);
+
+    }
+        
+    public void SetAxis(Vector2 inputAxis)
+    {
+        axis = inputAxis;
+    }
+
+    public void JumpStart() //Decidir como será el salto
+    {
+        if(collisions.isGrounded)
+        {
+            jumpVelocity = jumpForce;
+        }
     }
 }
