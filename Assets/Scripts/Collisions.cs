@@ -7,6 +7,7 @@ using UnityEngine;
 public class Collisions : MonoBehaviour
 {
     #region Variables
+    public EnemyBehaviour currentEnemy;
     [Header("Physics")]
     private Rigidbody2D _rb2D;
     private Collider2D _coll2D;
@@ -80,6 +81,7 @@ public class Collisions : MonoBehaviour
         isTouchingWall = false;
         isTouchingCeiling = false;
         isTouchingEnemy = false;
+        currentEnemy = null;
 
         justGotGrounded = false;
         justNotGrounded = false;
@@ -138,6 +140,7 @@ public class Collisions : MonoBehaviour
 
         if(hits > 0)
         {
+            currentEnemy = result[0].GetComponent<EnemyBehaviour>();
             isTouchingEnemy = true;
         }
     }

@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    public EnemyBehaviour enemy;
-
-    public enum State { Default, Dead, God }
-    public State state = State.Default;
+    public enum State { Prepare, Default, Dead, God }
+    public State state = State.Prepare;
 
     [Header("State")]
     public bool canMove = true;
@@ -41,6 +39,7 @@ public class CharacterBehaviour : MonoBehaviour
     public int hiScore;
     public Text scoreText;
     public Text hiScoreText;
+    private float startTime = 5;
     [Header("Graphics")]
     public SpriteRenderer rend;
     // Use this for initialization
@@ -48,7 +47,6 @@ public class CharacterBehaviour : MonoBehaviour
     {
         collisions = GetComponent<Collisions>();
         rb = GetComponent<Rigidbody2D>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyBehaviour>();
     }
 
     // Update is called once per frame
@@ -56,6 +54,9 @@ public class CharacterBehaviour : MonoBehaviour
     {
         switch (state)
         {
+            case State.Prepare:
+                PrepareUpdate(); 
+                break;
             case State.Default:
                 DefaultUpdate();
                 break;
@@ -72,11 +73,11 @@ public class CharacterBehaviour : MonoBehaviour
 
         //SCORE
         // ek /4.5f ese es un delay para que se vea un 000 cuando se acaba la animación
-        if(Mathf.RoundToInt(score - 4.5f) < 10) scoreText.text = "00" + Mathf.RoundToInt(score - 4.5f).ToString();
-        else if(Mathf.RoundToInt(score - 4.5f) < 100) scoreText.text = "0" + Mathf.RoundToInt(score - 4.5f).ToString();
-        else scoreText.text = "" + Mathf.RoundToInt(score - 4.5f).ToString();
+        if(Mathf.RoundToInt(score) < 10) scoreText.text = "00" + Mathf.RoundToInt(score).ToString();
+        else if(Mathf.RoundToInt(score) < 100) scoreText.text = "0" + Mathf.RoundToInt(score).ToString();
+        else scoreText.text = "" + Mathf.RoundToInt(score).ToString();
         hiScoreText.text = "High Score " + hiScore.ToString();
-        if(score - 4.5f >= hiScore) hiScore = Mathf.RoundToInt(score - 4.5f);
+        if(score >= hiScore) hiScore = Mathf.RoundToInt(score);
     }
 
     private void FixedUpdate()
@@ -98,7 +99,16 @@ public class CharacterBehaviour : MonoBehaviour
 
     protected virtual void DeadUpdate()
     {
+        horizontalSpeed = 0;
+        canJump = false;
+    }
 
+    protected virtual void PrepareUpdate()
+    {
+        startTime -= Time.deltaTime;
+        if (startTime <= 0) state = State.Default;
+        HorizontalMovement();
+        horizontalSpeed = 0;
     }
 
     void HorizontalMovement()
@@ -154,7 +164,8 @@ public class CharacterBehaviour : MonoBehaviour
         if(collisions.isTouchingEnemy)
         {
             Debug.Log("PlayerAttack");
-            enemy.Dead();
+            collisions.currentEnemy.Dead();
+            //enemy.Dead();
             score += 5;
         }
     }
