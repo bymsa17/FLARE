@@ -24,7 +24,8 @@ GameObject:
   - component: {fileID: 95638679910147382}
   - component: {fileID: 114691942412163538}
   - component: {fileID: 114860495442742878}
-  m_Layer: 0
+  - component: {fileID: 114029423790140984}
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -40,8 +41,24 @@ GameObject:
   m_Component:
   - component: {fileID: 4781219206701926}
   - component: {fileID: 212566754306166024}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Graphics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1911148889682882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4479789238732856}
+  - component: {fileID: 114486623900596928}
+  m_Layer: 9
+  m_Name: AudioPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,12 +71,26 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1079191410380392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.614, z: 0}
+  m_LocalPosition: {x: -0.02, y: 3.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4781219206701926}
+  - {fileID: 4479789238732856}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4479789238732856
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1911148889682882}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4054498877488786}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4781219206701926
 Transform:
@@ -136,6 +167,33 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114029423790140984
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079191410380392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f0ddfac814c5a940909abc58f5df228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114486623900596928
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1911148889682882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5346f5882c67b4dafca746bdfc936a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixerGroup: 0
+  sfxClips:
+  - {fileID: 8300000, guid: e9086dd0ed8a35144907481a1b01a2dc, type: 3}
+  ambientClips: []
+  musicClips: []
 --- !u!114 &114691942412163538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,12 +205,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2655fd3ee46e1e4ea1b1a168505f6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentEnemy: {fileID: 0}
   checkGround: 1
   checkCeiling: 1
   checkWall: 1
+  checkAttack: 1
   isGrounded: 0
   isTouchingCeiling: 0
   isTouchingWall: 0
+  isTouchingEnemy: 0
   isFalling: 0
   wasGroundedLastFrame: 0
   wasTouchingCeilingLastFrame: 0
@@ -170,7 +231,21 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 512
+      m_Bits: 1280
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  ceilingFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1024
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
@@ -184,18 +259,34 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 512
+      m_Bits: 1024
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  maxGroundHits: 2
+  attackFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 256
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  maxGroundHits: 3
   bottomBoxSize: {x: 0.27, y: 0.05}
   bottomBoxPos: {x: 0, y: 0}
-  topBoxSize: {x: 0, y: 0}
-  topBoxPos: {x: 0, y: 0}
+  topBoxSize: {x: 0.27, y: 0.05}
+  topBoxPos: {x: 0, y: 0.68}
   sideBoxSize: {x: 0.05, y: 0.5}
   sideBoxPos: {x: 0.15, y: 0.31}
+  attackBoxSize: {x: 0.87, y: 0.75}
+  attackBoxPos: {x: 0.65, y: 0.35}
 --- !u!114 &114860495442742878
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,11 +299,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  isDead: 0
   canMove: 1
   canJump: 1
   isFacingRight: 1
   isJumping: 0
   isRunning: 0
+  isLaddering: 0
+  attack: 0
   crouch: 0
   isLookingUp: 0
   isLookingDown: 0
@@ -227,6 +321,14 @@ MonoBehaviour:
   jumpRunForce: 6.5
   jumpForce: 0
   jumpVelocity: 0
+  score: 0
+  hiScore: 0
+  scoreText: {fileID: 0}
+  scorePauseText: {fileID: 0}
+  hiScoreText: {fileID: 0}
+  hiScorePauseText: {fileID: 0}
+  pause: 0
+  canvasAnimator: {fileID: 0}
   rend: {fileID: 212566754306166024}
 --- !u!212 &212566754306166024
 SpriteRenderer:

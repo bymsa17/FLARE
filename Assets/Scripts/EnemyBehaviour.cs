@@ -8,6 +8,7 @@ public class EnemyBehaviour : MonoBehaviour
     public State state = State.Default;
 
     [Header("State")]
+    public bool isDead = false;
     public bool isFacingRight = true;
     public bool isJumping = false;
     [Header("Physics")]
@@ -103,7 +104,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void Dead()
     {
-
+        state = State.Dead;
+        isDead = true;
     }
         
     public void SetAxis(Vector2 inputAxis)

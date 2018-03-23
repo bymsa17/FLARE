@@ -6,7 +6,6 @@ public class InputManager : MonoBehaviour
 {
     private CharacterBehaviour player;
     public Transform canvasPause;
-    bool paused = false;
 
     void Start()
     {
@@ -68,11 +67,7 @@ public class InputManager : MonoBehaviour
         if(Input.GetButtonDown("Pause"))
         {
             Debug.Log("Pause");
-            paused = !paused;
-            if (paused)
-            {
-                player.Pause();
-            }
+            player.Pause();
         }
     }
 

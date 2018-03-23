@@ -20,10 +20,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4633145175719730}
   - component: {fileID: 212168687910075266}
+  - component: {fileID: 114011548961078526}
   - component: {fileID: 61539205051356914}
-  - component: {fileID: 114441823556905862}
   - component: {fileID: 50037921664318382}
   - component: {fileID: 61943582551972888}
+  - component: {fileID: 95048351712198624}
+  - component: {fileID: 114459155288518816}
   m_Layer: 8
   m_Name: EnemyWalking
   m_TagString: Enemy
@@ -38,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1927825354923654}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6010365, y: 1.064, z: 0}
+  m_LocalPosition: {x: -1.3567687, y: 1.1388218, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,7 +53,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1927825354923654}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -87,7 +89,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.44, y: 0.8}
+  m_Size: {x: 0.25, y: 0.8}
   m_EdgeRadius: 0
 --- !u!61 &61943582551972888
 BoxCollider2D:
@@ -112,9 +114,26 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.68, y: 0.71}
+  m_Size: {x: 0.38, y: 0.71}
   m_EdgeRadius: 0
---- !u!114 &114441823556905862
+--- !u!95 &95048351712198624
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1927825354923654}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b3e7758229bbddd49acff6035055e962, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114011548961078526
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -122,12 +141,116 @@ MonoBehaviour:
   m_GameObject: {fileID: 1927825354923654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d53959dad11ef64493c3de3653b4d37, type: 3}
+  m_Script: {fileID: 11500000, guid: adb7d3a419caa214a974756c0f3e8d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {fileID: 0}
-  velocity: 0
-  direction: 0
+  state: 0
+  isFacingRight: 1
+  isJumping: 0
+  rb: {fileID: 0}
+  collisions: {fileID: 0}
+  walkSpeed: 3
+  movementSpeed: 0
+  horizontalSpeed: 0
+  axis: {x: 0, y: 0}
+  jumpWalkForce: 0
+  jumpRunForce: 0
+  jumpForce: 0
+  jumpVelocity: 0
+  rend: {fileID: 0}
+--- !u!114 &114459155288518816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1927825354923654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2655fd3ee46e1e4ea1b1a168505f6f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentEnemy: {fileID: 0}
+  checkGround: 1
+  checkCeiling: 1
+  checkWall: 1
+  checkAttack: 1
+  isGrounded: 0
+  isTouchingCeiling: 0
+  isTouchingWall: 0
+  isTouchingEnemy: 0
+  isFalling: 0
+  wasGroundedLastFrame: 0
+  wasTouchingCeilingLastFrame: 0
+  wasTouchingWallLastFrame: 0
+  justGotGrounded: 0
+  justNotGrounded: 0
+  justTouchWall: 0
+  justTouchCeiling: 0
+  groundFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1280
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  ceilingFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1024
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  wallFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1280
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  attackFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 256
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  maxGroundHits: 3
+  bottomBoxSize: {x: 0.27, y: 0.05}
+  bottomBoxPos: {x: 0, y: -0.55}
+  topBoxSize: {x: 0.27, y: 0.05}
+  topBoxPos: {x: 0, y: 0.29}
+  sideBoxSize: {x: 0.05, y: 0.65}
+  sideBoxPos: {x: 0.22, y: -0.14}
+  attackBoxSize: {x: 0.4, y: 0.75}
+  attackBoxPos: {x: -0.05, y: -0.18}
 --- !u!212 &212168687910075266
 SpriteRenderer:
   m_ObjectHideFlags: 1
