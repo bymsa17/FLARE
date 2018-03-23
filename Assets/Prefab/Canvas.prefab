@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224543629178741010}
   - component: {fileID: 222251484201077170}
   - component: {fileID: 114305521732385050}
+  - component: {fileID: 114514049828105648}
   m_Layer: 5
   m_Name: HiScore
   m_TagString: Untagged
@@ -195,6 +196,7 @@ GameObject:
   - component: {fileID: 224055698734849814}
   - component: {fileID: 222013434133642372}
   - component: {fileID: 114547548363046622}
+  - component: {fileID: 114432282185097484}
   m_Layer: 5
   m_Name: GAMEOVER
   m_TagString: Untagged
@@ -246,6 +248,7 @@ GameObject:
   - component: {fileID: 224796310682330092}
   - component: {fileID: 222805290884787482}
   - component: {fileID: 114429026956387798}
+  - component: {fileID: 114667226715233560}
   m_Layer: 5
   m_Name: GO
   m_TagString: Untagged
@@ -400,6 +403,7 @@ GameObject:
   - component: {fileID: 224007675656310740}
   - component: {fileID: 222052424477417696}
   - component: {fileID: 114962542214676440}
+  - component: {fileID: 114789998964533002}
   m_Layer: 5
   m_Name: YouScoreText
   m_TagString: Untagged
@@ -417,6 +421,7 @@ GameObject:
   - component: {fileID: 224059636359190190}
   - component: {fileID: 222094172823247630}
   - component: {fileID: 114790536102339138}
+  - component: {fileID: 114018400488875158}
   m_Layer: 5
   m_Name: PAUSE
   m_TagString: Untagged
@@ -485,6 +490,7 @@ GameObject:
   - component: {fileID: 224622760113480164}
   - component: {fileID: 222116803140175698}
   - component: {fileID: 114937077042468608}
+  - component: {fileID: 114637266403833046}
   m_Layer: 5
   m_Name: BestScoreText
   m_TagString: Untagged
@@ -588,6 +594,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114018400488875158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1781875536754994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: pause
 --- !u!114 &114066625515329306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -925,7 +943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: High Score 000
+  m_Text: Best Score 000
 --- !u!114 &114310552715383282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1144,6 +1162,18 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: GO
+--- !u!114 &114432282185097484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251835662316356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: game over
 --- !u!114 &114455626456097604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1223,6 +1253,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114514049828105648
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1007088755007526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: best score
 --- !u!114 &114547548363046622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1381,6 +1423,30 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114637266403833046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1854863294846654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: best score
+--- !u!114 &114667226715233560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1377138794408216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: go
 --- !u!114 &114711297577021878
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1563,6 +1629,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114789998964533002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1760223106611172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c23fac66fc08f429ffb0610b8de03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: your score
 --- !u!114 &114790536102339138
 MonoBehaviour:
   m_ObjectHideFlags: 1

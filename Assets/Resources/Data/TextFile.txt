@@ -13,3 +13,8 @@ fantastic	Fantásticos	Fantastic
 ultra	Ultra	Ultra
 fullscreen	Pantalla completa	Fullscreen
 back	Atrás	Back
+game over	Fin del juego	Game Over
+pause	Pausa	Pause
+your score	Tu puntuación	Your Score
+best score	Mejor puntuación	Best Score
+go	Ya	Go
