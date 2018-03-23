@@ -8,6 +8,8 @@ public class CharacterBehaviour : MonoBehaviour
     public enum State { Prepare, Default, Dead, Pause }
     public State state = State.Prepare;
 
+    public Animator animPlayer;
+
     [Header("State")]
     public bool isDead = false;
     public bool canMove = true;
@@ -110,6 +112,10 @@ public class CharacterBehaviour : MonoBehaviour
         {
             VerticalMovement();
         }
+        /*
+        animPlayer.SetBool("isGrounded", collisions.isGrounded);
+        animPlayer.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
+        animPlayer.SetFloat("speedY", rb.velocity.y);*/
     }
 
     protected virtual void DeadUpdate()
@@ -148,8 +154,16 @@ public class CharacterBehaviour : MonoBehaviour
         if(isFacingRight && axis.x < -0.1f) Flip();
         if(!isFacingRight && axis.x > 0.1f) Flip();
 
-        if(isRunning) movementSpeed = runSpeed;
-        else movementSpeed = walkSpeed;
+        if(isRunning)
+        {
+            movementSpeed = runSpeed;
+            //animPlayer.SetBool("run", true);
+        }
+        else
+        {
+            movementSpeed = walkSpeed;
+            //animPlayer.SetBool("run", false);
+        }
 
         if(collisions.isGrounded) horizontalSpeed = movementSpeed * axis.x;
         if(collisions.justGotGrounded) jumpVelocity = 0;
