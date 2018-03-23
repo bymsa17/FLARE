@@ -1,6 +1,6 @@
 id	spanish	english
 start	Empezar	Start
-options	Opciones	Options
+settings	Opciones	Settings
 exit	Salir	Exit
 title	Título	Title
 language	Idioma	Llanguage

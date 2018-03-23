@@ -6,8 +6,10 @@ public class EnemyBehaviour : MonoBehaviour
 {
     public enum State { Default, Dead }
     public State state = State.Default;
+    public CharacterBehaviour player;
 
     [Header("State")]
+    public bool isPaused = false;
     public bool isDead = false;
     public bool isFacingRight = true;
     public bool isJumping = false;
@@ -27,17 +29,21 @@ public class EnemyBehaviour : MonoBehaviour
     public float jumpVelocity;
     [Header("Graphics")]
     public SpriteRenderer rend;
+    public Animator animator;
     // Use this for initialization
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterBehaviour>();
         collisions = GetComponent<Collisions>();
         rb = GetComponent<Rigidbody2D>();
-        rend = GetComponent<SpriteRenderer>();
+        rend = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        isPaused = player.pause;
         switch(state)
         {
             case State.Default:
@@ -55,7 +61,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         collisions.MyFixedUpdate();
 
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
+        if (!isPaused) transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
     }
 
     protected virtual void DefaultUpdate()
@@ -66,6 +72,15 @@ public class EnemyBehaviour : MonoBehaviour
     protected virtual void DeadUpdate()
     {
         horizontalSpeed = 0;
+
+        if(!collisions.isGrounded)
+        {
+            jumpVelocity -= 0.2f;
+            if((axis.x < 0.1f) || (axis.x > -0.1f)) horizontalSpeed += movementSpeed * axis.x / 20;
+            if(horizontalSpeed > movementSpeed && isFacingRight) horizontalSpeed = movementSpeed;
+            if(horizontalSpeed < movementSpeed * -1 && !isFacingRight) horizontalSpeed = movementSpeed * -1;
+
+        }
     }
 
     void HorizontalMovement()
@@ -104,8 +119,12 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void Dead()
     {
-        state = State.Dead;
-        isDead = true;
+        if(!isDead)
+        {
+            state = State.Dead;
+            isDead = true;
+            animator.SetTrigger("Die");
+        }
     }
         
     public void SetAxis(Vector2 inputAxis)

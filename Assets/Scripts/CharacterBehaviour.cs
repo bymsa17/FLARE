@@ -13,7 +13,7 @@ public class CharacterBehaviour : MonoBehaviour
     [Header("State")]
     public bool isDead = false;
     public bool canMove = true;
-    public bool canJump = true;
+    public bool canJump = false;
     public bool isFacingRight = true;
     public bool isJumping = false;
     public bool isRunning = false;
@@ -45,7 +45,7 @@ public class CharacterBehaviour : MonoBehaviour
     public Text hiScoreText;
     public Text hiScorePauseText;
     public bool pause = false;
-    private float startTime = 5;
+    private float startTime = 4;
     public Animator canvasAnimator;
     [Header("Graphics")]
     public SpriteRenderer rend;
@@ -101,7 +101,7 @@ public class CharacterBehaviour : MonoBehaviour
     {
         collisions.MyFixedUpdate();
 
-        transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
+        if (!pause) transform.position += new Vector3(horizontalSpeed * Time.deltaTime, jumpVelocity * Time.deltaTime, 0);
     }
 
     protected virtual void DefaultUpdate()
@@ -115,19 +115,34 @@ public class CharacterBehaviour : MonoBehaviour
         /*
         animPlayer.SetBool("isGrounded", collisions.isGrounded);
         animPlayer.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        animPlayer.SetFloat("speedY", rb.velocity.y);*/
+        animPlayer.SetFloat("speedY", rb.velocity.y);
+        */
     }
 
     protected virtual void DeadUpdate()
     {
         horizontalSpeed = 0;
         canJump = false;
+
+        if(!collisions.isGrounded)
+        {
+            jumpVelocity -= 0.2f;
+            if((axis.x < 0.1f) || (axis.x > -0.1f)) horizontalSpeed += movementSpeed * axis.x / 20;
+            if(horizontalSpeed > movementSpeed && isFacingRight) horizontalSpeed = movementSpeed;
+            if(horizontalSpeed < movementSpeed * -1 && !isFacingRight) horizontalSpeed = movementSpeed * -1;
+
+        }
     }
 
     protected virtual void PrepareUpdate()
     {
         startTime -= Time.deltaTime;
-        if(startTime <= 0) state = State.Default;
+        canJump = false;
+        if(startTime <= 0)
+        {
+            state = State.Default;
+            canJump = true;
+        }
         HorizontalMovement();
         horizontalSpeed = 0;
     }
@@ -190,12 +205,15 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void Attack()
     {
-        if(collisions.isTouchingEnemy)
+        if(state == State.Default)
         {
-            Debug.Log("PlayerAttack");
-            collisions.currentEnemy.Dead();
-            //enemy.Dead();
-            score += 5;
+            if(collisions.isTouchingEnemy)
+            {
+                Debug.Log("PlayerAttack");
+                if(!collisions.currentEnemy.isDead) score += 5;
+                collisions.currentEnemy.Dead();
+                Destroy(collisions.currentEnemy.gameObject, 10);
+            }
         }
     }
 
@@ -206,11 +224,13 @@ public class CharacterBehaviour : MonoBehaviour
         {
             state = State.Pause;
             canvasAnimator.SetTrigger("Pause");
+            canJump = false;
         }
         else
         {
             state = State.Default;
             canvasAnimator.SetTrigger("Unpause");
+            canJump = true;
         }
     }
 
@@ -241,6 +261,7 @@ public class CharacterBehaviour : MonoBehaviour
                     state = State.Dead;
                     canvasAnimator.SetTrigger("Die");
                     isDead = true;
+                    canJump = false;
                 }
             }
 
@@ -271,7 +292,7 @@ public class CharacterBehaviour : MonoBehaviour
     public void JumpStart() //Decidir como será el salto
     {
         if(!canJump) return;
-
+        
         if(collisions.isGrounded)
         {
             if(crouch)
