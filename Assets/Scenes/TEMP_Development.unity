@@ -408,6 +408,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114096567777835608, guid: 011774e48dee82742acfbf093942142d,
+        type: 2}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2103874216}
     - target: {fileID: 224393445344333442, guid: 011774e48dee82742acfbf093942142d,
         type: 2}
       propertyPath: m_LocalPosition.y
@@ -418,9 +423,15 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: 1633.8634
       objectReference: {fileID: 0}
-    - target: {fileID: 1876674982027336, guid: 011774e48dee82742acfbf093942142d, type: 2}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 114632432533849332, guid: 011774e48dee82742acfbf093942142d,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 114632432533849332, guid: 011774e48dee82742acfbf093942142d,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 011774e48dee82742acfbf093942142d, type: 2}
@@ -1142,3 +1153,9 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 396727598}
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+--- !u!114 &2103874216 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114860495442742878, guid: e530d0f409a324548a48b8e1d11ce306,
+    type: 2}
+  m_PrefabInternal: {fileID: 1625810444}
+  m_Script: {fileID: 11500000, guid: 6b63503390706ea4ab7ed974d758fea6, type: 3}
