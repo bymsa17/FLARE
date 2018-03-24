@@ -62,10 +62,7 @@ public static class GameData
     [Serializable]
     public struct GameState
     {
-        public float playerPosition;
-        public bool hasKey;
         public int score;
-        public string playerName;
     }
     public static GameState gameState;
 
@@ -73,17 +70,15 @@ public static class GameData
     {
         Debug.Log("Saving");
         Data.WriteBinaryPersistentPath(gameState, "SaveGame_" + slot + ".save");
+
         Debug.Log("Saved");
     }
     public static void NewGame(int slot)
     {
         gameState = new GameState();
         Debug.Log("New game");
-
-        gameState.playerPosition = 0;
-        gameState.hasKey = false;
+        
         gameState.score = 0;
-        gameState.playerName = "NoName";
 
         SaveGame(slot);
     }

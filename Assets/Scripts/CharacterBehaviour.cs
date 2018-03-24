@@ -9,6 +9,7 @@ public class CharacterBehaviour : MonoBehaviour
     public State state = State.Prepare;
 
     public Animator animPlayer;
+    private AudioPlayer audioPlayer;
 
     [Header("State")]
     public bool isDead = false;
@@ -18,6 +19,7 @@ public class CharacterBehaviour : MonoBehaviour
     public bool isJumping = false;
     public bool isRunning = false;
     public bool isLaddering = false;
+    public bool touchLadder = false;
     public bool attack = false;
     public bool crouch = false;
     public bool isLookingUp = false;
@@ -49,11 +51,19 @@ public class CharacterBehaviour : MonoBehaviour
     public Animator canvasAnimator;
     [Header("Graphics")]
     public SpriteRenderer rend;
+    public SpriteRenderer sword;
+
     // Use this for initialization
+
     void Start()
     {
         collisions = GetComponent<Collisions>();
         rb = GetComponent<Rigidbody2D>();
+        GameData.LoadGame(1);
+        hiScore = GameData.gameState.score;
+        animPlayer = GetComponent<Animator>();
+        audioPlayer = GetComponentInChildren<AudioPlayer>();
+        audioPlayer.PlayMusic(0);
     }
 
     // Update is called once per frame
@@ -77,15 +87,15 @@ public class CharacterBehaviour : MonoBehaviour
                 break;
         }
 
-
+        
         //SCORE
         if(Mathf.RoundToInt(score) < 10) scoreText.text = "00" + Mathf.RoundToInt(score).ToString();
         else if(Mathf.RoundToInt(score) < 100) scoreText.text = "0" + Mathf.RoundToInt(score).ToString();
         else scoreText.text = Mathf.RoundToInt(score).ToString();
-
+        
         if(Mathf.RoundToInt(hiScore) < 10) hiScoreText.text = "00" + Mathf.RoundToInt(hiScore).ToString();
         else if(Mathf.RoundToInt(hiScore) < 100) hiScoreText.text = "0" + Mathf.RoundToInt(hiScore).ToString();
-        else hiScoreText.text = Mathf.RoundToInt(score).ToString();
+        else hiScoreText.text = Mathf.RoundToInt(hiScore).ToString();
         
         if(score >= hiScore) hiScore = Mathf.RoundToInt(score);
 
@@ -94,7 +104,8 @@ public class CharacterBehaviour : MonoBehaviour
 
         if(Mathf.RoundToInt(hiScore) < 10) hiScoreText.text = "High Score 00" + Mathf.RoundToInt(hiScore).ToString();
         else if(Mathf.RoundToInt(hiScore) < 100) hiScoreText.text = "High Score 0" + Mathf.RoundToInt(hiScore).ToString();
-        else hiScoreText.text = "High Score " + Mathf.RoundToInt(score).ToString();
+        else hiScoreText.text = "High Score " + Mathf.RoundToInt(hiScore).ToString();
+        
     }
 
     private void FixedUpdate()
@@ -108,15 +119,24 @@ public class CharacterBehaviour : MonoBehaviour
     {
         HorizontalMovement();
         score += Time.deltaTime;
+
+        if (touchLadder)
+        {
+            if(Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                isLaddering = true;
+            }
+
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                isLaddering = false;
+            }
+        }
+
         if(isLaddering)
         {
             VerticalMovement();
         }
-        /*
-        animPlayer.SetBool("isGrounded", collisions.isGrounded);
-        animPlayer.SetFloat("speedX", Mathf.Abs(rb.velocity.x));
-        animPlayer.SetFloat("speedY", rb.velocity.y);
-        */
     }
 
     protected virtual void DeadUpdate()
@@ -197,6 +217,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     void VerticalMovement()
     {
+        rb.velocity = new Vector2 (0, 0);
         if((axis.y > 0.1f) || (axis.y < 0.1f))
         {
             this.transform.position += new Vector3(0, axis.y * 0.05f, 0);
@@ -207,12 +228,17 @@ public class CharacterBehaviour : MonoBehaviour
     {
         if(state == State.Default)
         {
+            if (isFacingRight) animPlayer.SetTrigger("Attack");
+            else animPlayer.SetTrigger("AttackFlip");
+
+            audioPlayer.PlaySFX(2, 1, Random.Range(0.9f, 1.1f));
+
             if(collisions.isTouchingEnemy)
             {
                 Debug.Log("PlayerAttack");
-                if(!collisions.currentEnemy.isDead) score += 5;
+                if(!collisions.currentEnemy.isDead) score += 10;
                 collisions.currentEnemy.Dead();
-                Destroy(collisions.currentEnemy.gameObject, 10);
+                Destroy(collisions.currentEnemy.gameObject, 9);
             }
         }
     }
@@ -247,28 +273,25 @@ public class CharacterBehaviour : MonoBehaviour
         {
             if(other.tag == "Ladder")
             {
-                rb.gravityScale = 0;
-                rb.velocity = Vector2.zero;
-                isLaddering = true;
-                canJump = false;
+                touchLadder = true;
             }
 
             if(other.tag == "Enemy")
             {
                 if(other.GetComponent<EnemyBehaviour>().isDead == false)
                 {
-                    Debug.Log("TAS MORIO PRIMOGAO");
-                    state = State.Dead;
-                    canvasAnimator.SetTrigger("Die");
-                    isDead = true;
-                    canJump = false;
+                    Die();
                 }
             }
 
             if (other.tag == "Coin")
             {
-                score += 50;
-                other.gameObject.SetActive(false);
+                if(other.GetComponent<CoinBehaviour>().grabbable)
+                {
+                    score += 50;
+                    audioPlayer.PlaySFX(1, 1, Random.Range(0.9f, 1.1f));
+                    other.GetComponent<CoinBehaviour>().ResetCoin();
+                }
             }
         }
     }
@@ -277,9 +300,8 @@ public class CharacterBehaviour : MonoBehaviour
     {
         if(other.tag == "Ladder")
         {
-            rb.gravityScale = gravity;
+            touchLadder = false;
             isLaddering = false;
-            canJump = true;
         }
     }
 
@@ -289,10 +311,23 @@ public class CharacterBehaviour : MonoBehaviour
         axis = inputAxis;
     }
 
+    public void Die()
+    {
+        audioPlayer.PlaySFX(3, 1, Random.Range(0.9f, 1.1f));
+        Debug.Log("TAS MORIO PRIMOGAO");
+        state = State.Dead;
+        canvasAnimator.SetTrigger("Die");
+        animPlayer.SetTrigger("Die");
+        isDead = true;
+        canJump = false;
+        GameData.gameState.score = hiScore;
+        GameData.SaveGame(1);
+    }
+
     public void JumpStart() //Decidir como será el salto
     {
         if(!canJump) return;
-        
+        audioPlayer.PlaySFX(0, 1, Random.Range(0.9f, 1.1f));
         if(collisions.isGrounded)
         {
             if(crouch)

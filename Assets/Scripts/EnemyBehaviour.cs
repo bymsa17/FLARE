@@ -9,12 +9,15 @@ public class EnemyBehaviour : MonoBehaviour
     public CharacterBehaviour player;
 
     [Header("State")]
+    public bool canJump;
     public bool isPaused = false;
+    public bool isPausedLastFrame = false;
     public bool isDead = false;
     public bool isFacingRight = true;
     public bool isJumping = false;
     [Header("Physics")]
     public Rigidbody2D rb;
+    public Vector2 rbVelocity;
     public Collisions collisions;
     private float gravity;
     [Header("Speed")]
@@ -38,22 +41,46 @@ public class EnemyBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rend = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        if(isFacingRight == false)
+        {
+            collisions.sideBoxPos.x *= -1;
+            collisions.attackBoxPos.x *= -1;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         isPaused = player.pause;
-        switch(state)
+        if(isPaused)
         {
-            case State.Default:
-                DefaultUpdate();
-                break;
-            case State.Dead:
-                DeadUpdate();
-                break;
-            default:
-                break;
+            rb.gravityScale = 0;
+            rb.velocity = new Vector2(0, 0);
+        }
+        else
+        {
+            if(isPausedLastFrame) rb.velocity = rbVelocity;
+            rbVelocity = rb.velocity;
+            rb.gravityScale = 1;
+        }
+
+        if(isPaused) isPausedLastFrame = true;
+        else isPausedLastFrame = false;
+
+        if(!isPaused)
+        {
+            switch(state)
+            {
+                case State.Default:
+                    DefaultUpdate();
+                    break;
+                case State.Dead:
+                    DeadUpdate();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -92,7 +119,6 @@ public class EnemyBehaviour : MonoBehaviour
 
         if(collisions.isTouchingWall)
         {
-          
             Flip();
         }
         
@@ -111,7 +137,6 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Flip()
     {
-        Debug.Log("Flip?");
         rend.flipX = !rend.flipX;
         isFacingRight = !isFacingRight;
         collisions.Flip();
@@ -126,7 +151,15 @@ public class EnemyBehaviour : MonoBehaviour
             animator.SetTrigger("Die");
         }
     }
-        
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Jumper")
+        {
+            if (canJump) rb.velocity = new Vector2(0, 4);
+        }
+    }
+
     public void SetAxis(Vector2 inputAxis)
     {
         axis = inputAxis;
